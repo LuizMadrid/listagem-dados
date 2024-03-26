@@ -1,14 +1,14 @@
 import { ChevronDown } from 'lucide-react';
 
 import { Badge } from './ui/badge';
-import nivoLogo from '../assets/logo-nivo.svg';
+import codeLogo from '../assets/logo-code.svg';
 
 export function Header() {
 	return (
 		<div className="max-w-[1200px] mx-auto flex items-center justify-between">
 			<div className="flex items-center gap-3">
 				<div className="flex items-center gap-2.5">
-					<img src={nivoLogo} alt="nivo.video" />
+					<img src={codeLogo} alt="logo" className='size-9' />
 
 					<Badge>BETA</Badge>
 				</div>
@@ -30,12 +30,6 @@ export function Header() {
 				</svg>
 
 				<div className="flex items-center gap-2.5">
-					<img
-						src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/phoenix/phoenix-original.svg"
-						className="rounded-full size-5"
-						alt=""
-					/>
-
 					<span className="text-sm font-medium text-zinc-100">Study</span>
 
 					<Badge variant="primary">FREE</Badge>

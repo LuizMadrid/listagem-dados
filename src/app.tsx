@@ -1,5 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { FileDown, MoreHorizontal, Plus, Search } from 'lucide-react';
+import { FileDown, Filter, MoreHorizontal, Plus, Search } from 'lucide-react';
+import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Header } from './components/header';
@@ -8,7 +9,6 @@ import { Tabs } from './components/tabs';
 import { Button } from './components/ui/button';
 import { Control, Input } from './components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table';
-
 
 export interface TagResponse {
   first: number
@@ -28,14 +28,17 @@ export interface Tag {
 }
 
 export function App() {
-	const [searchParams] = useSearchParams();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const urlFilter = searchParams.get('filter') ?? '';
+	
+	const [filter, setFilter] = useState(urlFilter);
 
 	const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
 	
 	const { data: tagsResponse, isLoading } = useQuery<TagResponse>({
-		queryKey: ['get-tags', page],
+		queryKey: ['get-tags', urlFilter, page],
 		queryFn: async () => {
-			const response = await fetch(`http://localhost:3333/tags?_page=${page}&_per_page=10`);
+			const response = await fetch(`http://localhost:3333/tags?_page=${page}&_per_page=10&title=${urlFilter}`);
 			const data = await response.json();
 
 			return data;
@@ -43,12 +46,23 @@ export function App() {
 		placeholderData: keepPreviousData,
 	});
 
+	function handleFilter(e: FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		
+		setSearchParams(params => {
+			params.set('page', '1');
+			params.set('filter', filter);
+
+			return params;
+		});
+	}
+
 	if (isLoading) {
 		return;
 	}
 
 	return (
-		<div className='py-10 space-y-8'>
+		<div className='flex-1 py-10 space-y-8'>
 			<div>
 				<Header />
 				<Tabs />
@@ -64,13 +78,25 @@ export function App() {
 				</div>
 
 				<div className='flex items-center justify-between'>
-					<Input variant='filter'>
-						<Search className='size-3' />
-						<Control placeholder='Search tags' />
-					</Input>
+					<form className='flex items-center gap-x-3' onSubmit={handleFilter}>
+						<Input variant='filter'>
+							<Search className='size-3' />
+							<Control 
+								placeholder='Search tags...' 
+								onChange={e => setFilter(e.target.value)} 
+								value={filter} 
+							/>
+						</Input>
 
-					<Button variant='default'>
-						<FileDown className='size-3' />
+						<Button variant='default' type='submit' className='group'>
+							<Filter className='size-3 group-hover:text-teal-400' />
+							Filter
+						</Button>
+					</form>
+
+
+					<Button variant='default' className='group'>
+						<FileDown className='size-3 group-hover:text-teal-400' />
 						Export
 					</Button>
 				</div>

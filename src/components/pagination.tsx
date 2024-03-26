@@ -60,7 +60,17 @@ export function Pagination({ items, page, pages }: PaginationProps) {
 
 	return (
 		<div className="flex items-center justify-between text-sm text-zinc-500">
-			<span>Showing 10 of {items} items</span>
+			<p>
+				Showing 
+				<span className='px-1'>
+					{items > 10 ? (
+						'10'
+					) : (
+						items
+					)}
+				</span>
+				of {items} items
+			</p>
 			<div className="flex items-center gap-8">
 				<div className="flex items-center gap-2">
 					<span>Rows per page</span>
