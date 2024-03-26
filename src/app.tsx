@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { FileDown, Filter, MoreHorizontal, Plus, Search } from 'lucide-react';
+import { Eraser, FileDown, Filter, MoreHorizontal, Plus, Search } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -17,6 +17,7 @@ export interface TagResponse {
   last: number
   pages: number
   items: number
+	itemsInPage: number
   data: Tag[]
 }
 
@@ -34,7 +35,7 @@ export function App() {
 	const [filter, setFilter] = useState(urlFilter);
 
 	const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
-	
+
 	const { data: tagsResponse, isLoading } = useQuery<TagResponse>({
 		queryKey: ['get-tags', urlFilter, page],
 		queryFn: async () => {
@@ -46,12 +47,29 @@ export function App() {
 		placeholderData: keepPreviousData,
 	});
 
+	const havePrev = tagsResponse?.prev !== null;
+	const prevCount = tagsResponse?.prev as number * 10;
+
+	const itemsInPage = havePrev ? tagsResponse?.data.length as number + prevCount : tagsResponse?.data.length as number;
+
 	function handleFilter(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		
 		setSearchParams(params => {
 			params.set('page', '1');
 			params.set('filter', filter);
+
+			return params;
+		});
+	}
+
+	function handleErase(e: FormEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		
+		setSearchParams(params => {
+			params.set('page', '1');
+			params.set('filter', '');
+			setFilter('');
 
 			return params;
 		});
@@ -92,6 +110,13 @@ export function App() {
 							<Filter className='size-3 group-hover:text-teal-400' />
 							Filter
 						</Button>
+						
+						{filter && (
+							<Button variant='ghost' className='group hover:text-teal-400' onClick={handleErase} type='submit'>
+								<Eraser className='size-3 group-hover:text-teal-400' />
+								Clear
+							</Button>
+						)}
 					</form>
 
 
@@ -149,7 +174,7 @@ export function App() {
 				</Table>
 
 				{tagsResponse && (
-					<Pagination pages={tagsResponse?.pages} items={tagsResponse.items} page={page} />
+					<Pagination pages={tagsResponse?.pages} items={tagsResponse.items} page={page} itemsInPage={itemsInPage} />
 				)}
 			</main>
 		</div>

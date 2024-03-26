@@ -81,19 +81,29 @@
       "amountOfVideos": 116
     },
     {
+      "title": "Svelte",
+      "slug": "old",
+      "amountOfVideos": 135
+    },
+    {
+      "title": "React",
+      "slug": "old",
+      "amountOfVideos": 92
+    },
+    {
       "title": "Aurelia",
       "slug": "old",
       "amountOfVideos": 71
     },
     {
-      "title": "Meteor",
+      "title": "Svelte",
       "slug": "old",
-      "amountOfVideos": 120
+      "amountOfVideos": 135
     },
     {
-      "title": "Mithril",
+      "title": "React",
       "slug": "old",
-      "amountOfVideos": 166
+      "amountOfVideos": 92
     },
     {
       "title": "Polymer",
@@ -184,16 +194,6 @@
       "title": "Aurelia",
       "slug": "old",
       "amountOfVideos": 71
-    },
-    {
-      "title": "Meteor",
-      "slug": "old",
-      "amountOfVideos": 120
-    },
-    {
-      "title": "Mithril",
-      "slug": "old",
-      "amountOfVideos": 166
     },
     {
       "title": "Polymer",

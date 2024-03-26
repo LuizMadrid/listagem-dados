@@ -13,9 +13,10 @@ interface PaginationProps {
   pages: number
   items: number
   page: number
+	itemsInPage: number
 }
 
-export function Pagination({ items, page, pages }: PaginationProps) {
+export function Pagination({ items, page, pages, itemsInPage }: PaginationProps) {
 	const [, setSearchParams] = useSearchParams();
 
 	function firstPage() {
@@ -60,20 +61,12 @@ export function Pagination({ items, page, pages }: PaginationProps) {
 
 	return (
 		<div className="flex items-center justify-between text-sm text-zinc-500">
-			<p>
-				Showing 
-				<span className='px-1'>
-					{items > 10 ? (
-						'10'
-					) : (
-						items
-					)}
-				</span>
-				of {items} items
-			</p>
+			<span>
+				Showing {itemsInPage} of {items} items
+			</span>
 			<div className="flex items-center gap-8">
 				<div className="flex items-center gap-2">
-					<span>Rows per page</span>
+					<span>Rows In page</span>
 
 					<Select defaultValue="10">
 						<SelectTrigger aria-label="Page" />
