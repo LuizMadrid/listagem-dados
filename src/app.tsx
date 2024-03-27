@@ -1,8 +1,10 @@
+import * as Dialog from '@radix-ui/react-dialog';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Eraser, FileDown, Filter, MoreHorizontal, Plus, Search } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { DialogTag } from './components/dialog-tag';
 import { Header } from './components/header';
 import { Pagination } from './components/pagination';
 import { Tabs } from './components/tabs';
@@ -22,10 +24,10 @@ export interface TagResponse {
 }
 
 export interface Tag {
+  id: string
   title: string
   slug: string
   amountOfVideos: number
-  id: string
 }
 
 export function App() {
@@ -80,7 +82,7 @@ export function App() {
 	}
 
 	return (
-		<div className='flex-1 py-10 space-y-8'>
+		<div className='min-h-screen py-10 space-y-8'>
 			<div>
 				<Header />
 				<Tabs />
@@ -89,10 +91,17 @@ export function App() {
 			<main className='max-w-6xl mx-auto space-y-5'>
 				<div className='flex items-center gap-x-3'>
 					<h1 className='text-xl font-bold'>Tags</h1>
-					<Button variant='primary'>
-						<Plus className='size-3' />
-						Create new
-					</Button>
+					
+					<Dialog.Root>
+						<Dialog.Trigger asChild>
+							<Button variant='primary'>
+								<Plus className='size-3' />
+								Create new
+							</Button>
+						</Dialog.Trigger>
+
+						<DialogTag />
+					</Dialog.Root>
 				</div>
 
 				<div className='flex items-center justify-between'>
@@ -154,15 +163,15 @@ export function App() {
 										<span className='text-xs text-zinc-500'>{tag.id}</span>
 									</div>
 								</TableCell>
-							
+						
 								<TableCell className='text-zinc-300'>
-									{tag.amountOfVideos > 1 ? (
+									{tag.amountOfVideos >= 2 ? (
 										`${tag.amountOfVideos} videos`
 									) : (
 										`${tag.amountOfVideos} video`
 									)}
 								</TableCell>
-							
+						
 								<TableCell className='text-right'>
 									<Button size='icon'>
 										<MoreHorizontal className='size-4' />
